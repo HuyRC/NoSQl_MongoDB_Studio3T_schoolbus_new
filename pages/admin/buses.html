@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Xe buýt - School Bus Management</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="../../css/admin-layout.css">
+    <link rel="stylesheet" href="../../css/custom.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-bus-alt"></i>
+            <h4>School Bus</h4>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="schools.html" class="menu-item"><i class="fas fa-school"></i><span>Quản lý Trường</span></a>
+            <a href="students.html" class="menu-item"><i class="fas fa-user-graduate"></i><span>Quản lý Học sinh</span></a>
+            <a href="stops.html" class="menu-item"><i class="fas fa-map-marker-alt"></i><span>Quản lý Điểm đón</span></a>
+            <a href="routes.html" class="menu-item"><i class="fas fa-route"></i><span>Quản lý Tuyến đường</span></a>
+            <a href="drivers.html" class="menu-item"><i class="fas fa-id-card"></i><span>Quản lý Tài xế</span></a>
+            <a href="buses.html" class="menu-item active"><i class="fas fa-bus"></i><span>Quản lý Xe buýt</span></a>
+            <a href="trips.html" class="menu-item"><i class="fas fa-calendar-check"></i><span>Quản lý Chuyến đi</span></a>
+            <a href="assignments.html" class="menu-item"><i class="fas fa-clipboard-list"></i><span>Phân công Học sinh</span></a>
+        </div>
+        <div class="sidebar-footer">
+            <a href="#" class="menu-item text-danger" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container-fluid">
+                <button class="btn btn-link" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+                <div class="navbar-brand mb-0 h1">Quản lý Xe buýt</div>
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle fa-lg"></i><span class="ms-2">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-2"></i>Cài đặt</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn2"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content-wrapper fade-in">
+            <div class="page-header mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2><i class="fas fa-bus me-2"></i>Quản lý Xe buýt</h2>
+                        <p class="text-muted">Quản lý thông tin các xe buýt đưa đón học sinh</p>
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#busModal" onclick="openAddBusModal()">
+                        <i class="fas fa-plus me-2"></i>Thêm xe buýt
+                    </button>
+                </div>
+            </div>
+
+            <!-- Buses Table Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-list me-2"></i>Danh sách xe buýt
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="busesTable" class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã xe</th>
+                                    <th>Biển số</th>
+                                    <th>Hãng xe</th>
+                                    <th>Năm SX</th>
+                                    <th>Sức chứa</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bus Modal -->
+    <div class="modal fade" id="busModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="busModalTitle">
+                        <i class="fas fa-bus me-2"></i>Thêm xe buýt
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="busForm">
+                        <input type="hidden" id="busId">
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="busCode" class="form-label">Mã xe <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="busCode" required>
+                                <div class="form-text-help">Ví dụ: BUS001</div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="busPlate" class="form-label">Biển số xe <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="busPlate" required>
+                                <div class="form-text-help">Ví dụ: 51B-123.45</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="busBrand" class="form-label">Hãng xe</label>
+                                <input type="text" class="form-control" id="busBrand" placeholder="Ví dụ: Ford Transit">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="busYear" class="form-label">Năm SX</label>
+                                <input type="number" class="form-control" id="busYear" min="2000" max="2030" placeholder="2022">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="busCapacity" class="form-label">Sức chứa <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="busCapacity" min="1" max="100" required>
+                            <div class="form-text-help">Số chỗ ngồi (học sinh)</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="busActive" checked>
+                                <label class="form-check-label" for="busActive">
+                                    Đang hoạt động
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Hủy
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="saveBus()">
+                        <i class="fas fa-save me-2"></i>Lưu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="../../js/api-service.js"></script>
+    <script src="../../js/admin-layout.js"></script>
+    <script src="../../js/modules/buses.js"></script>
+</body>
+</html>

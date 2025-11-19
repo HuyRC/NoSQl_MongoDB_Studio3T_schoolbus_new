@@ -1,0 +1,57 @@
+##############################
+# Build results
+##############################
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+##############################
+# User-specific files
+##############################
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+##############################
+# Visual Studio & VS Code
+##############################
+.vscode/
+.vs/
+.idea/
+
+##############################
+# Environment / config files
+##############################
+appsettings.Development.json
+appsettings.Local.json
+.env
+secrets.json
+
+##############################
+# Backup & temporary files
+##############################
+*.bak
+*.tmp
+*.log
+*.cache
+*.DS_Store
+Thumbs.db
+
+##############################
+# Publish outputs
+##############################
+*.publishsettings
+*.Publish.xml
+
+##############################
+# Node / npm (if any)
+##############################
+node_modules/
+
+##############################
+# Other
+##############################
+*.nupkg
+*.snupkg

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - School Bus Management</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .login-header i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .login-header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .login-body {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #5a5c69;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #858796;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e3e6f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            outline: none;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .form-check-label {
+            cursor: pointer;
+            color: #5a5c69;
+            font-size: 0.95rem;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(78, 115, 223, 0.4);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 115, 223, 0.5);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 20px 30px 30px;
+            color: #858796;
+            font-size: 0.9rem;
+        }
+
+        .demo-credentials {
+            background: #f8f9fc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #36b9cc;
+        }
+
+        .demo-credentials h6 {
+            color: #36b9cc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .demo-credentials p {
+            margin: 5px 0;
+            font-size: 0.85rem;
+            color: #5a5c69;
+        }
+
+        .demo-credentials strong {
+            color: #2e59d9;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #e74a3b;
+        }
+
+        @media (max-width: 576px) {
+            .login-container {
+                padding: 10px;
+            }
+            
+            .login-header {
+                padding: 30px 20px;
+            }
+            
+            .login-body {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-bus-alt"></i>
+                <h2>School Bus</h2>
+                <p>Management System</p>
+            </div>
+
+            <div class="login-body">
+                <div class="demo-credentials">
+                    <h6><i class="fas fa-info-circle me-2"></i>Thông tin đăng nhập</h6>
+                    <p><strong>Username:</strong> admin</p>
+                    <p><strong>Password:</strong> admin123</p>
+                </div>
+
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span id="errorText"></span>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user me-2"></i>Tên đăng nhập
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="username" 
+                                placeholder="Nhập tên đăng nhập"
+                                required
+                                autocomplete="username"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Mật khẩu
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="password" 
+                                placeholder="Nhập mật khẩu"
+                                required
+                                autocomplete="current-password"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            Ghi nhớ đăng nhập
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
+                    </button>
+                </form>
+            </div>
+
+            <div class="login-footer">
+                <p>&copy; 2025 School Bus Management System</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Check if already logged in
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = '/pages/admin/dashboard.html';
+                return;
+            }
+
+            // Handle login form submit
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const username = $('#username').val().trim();
+                const password = $('#password').val().trim();
+                const rememberMe = $('#rememberMe').is(':checked');
+
+                // Hide error message
+                $('#errorMessage').hide();
+
+                // Simple validation (you can enhance this with backend API)
+                if (username === 'admin' && password === 'admin123') {
+                    // Success
+                    if (rememberMe) {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('username', username);
+                    } else {
+                        sessionStorage.setItem('isLoggedIn', 'true');
+                        sessionStorage.setItem('username', username);
+                    }
+                    
+                    // Show success animation
+                    $('body').html(`
+                        <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; flex-direction:column; color:white;">
+                            <i class="fas fa-check-circle" style="font-size:5rem; margin-bottom:20px; animation: bounceIn 0.6s;"></i>
+                            <h2>Đăng nhập thành công!</h2>
+                            <p>Đang chuyển hướng...</p>
+                        </div>
+                        <style>
+                            @keyframes bounceIn {
+                                0% { transform: scale(0); }
+                                50% { transform: scale(1.2); }
+                                100% { transform: scale(1); }
+                            }
+                        </style>
+                    `);
+                    
+                    setTimeout(() => {
+                        window.location.href = '/pages/admin/dashboard.html';
+                    }, 1500);
+                } else {
+                    // Error
+                    $('#errorText').text('Tên đăng nhập hoặc mật khẩu không đúng!');
+                    $('#errorMessage').slideDown();
+                    
+                    // Shake animation
+                    $('.login-card').css('animation', 'shake 0.5s');
+                    setTimeout(() => {
+                        $('.login-card').css('animation', '');
+                    }, 500);
+                }
+            });
+
+            // Add shake animation
+            $('head').append(`
+                <style>
+                    @keyframes shake {
+                        0%, 100% { transform: translateX(0); }
+                        10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+                        20%, 40%, 60%, 80% { transform: translateX(10px); }
+                    }
+                </style>
+            `);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - School Bus Management</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="../../css/admin-layout.css">
+    <link rel="stylesheet" href="../../css/custom.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-bus-alt"></i>
+            <h4>School Bus</h4>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="schools.html" class="menu-item">
+                <i class="fas fa-school"></i>
+                <span>Quản lý Trường</span>
+            </a>
+            <a href="students.html" class="menu-item">
+                <i class="fas fa-user-graduate"></i>
+                <span>Quản lý Học sinh</span>
+            </a>
+            <a href="stops.html" class="menu-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Quản lý Điểm đón</span>
+            </a>
+            <a href="routes.html" class="menu-item">
+                <i class="fas fa-route"></i>
+                <span>Quản lý Tuyến đường</span>
+            </a>
+            <a href="drivers.html" class="menu-item">
+                <i class="fas fa-id-card"></i>
+                <span>Quản lý Tài xế</span>
+            </a>
+            <a href="buses.html" class="menu-item">
+                <i class="fas fa-bus"></i>
+                <span>Quản lý Xe buýt</span>
+            </a>
+            <a href="trips.html" class="menu-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Quản lý Chuyến đi</span>
+            </a>
+            <a href="assignments.html" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Phân công Học sinh</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <a href="#" class="menu-item text-danger" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container-fluid">
+                <button class="btn btn-link" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand mb-0 h1">Dashboard</div>
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle fa-lg"></i>
+                            <span class="ms-2">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-2"></i>Cài đặt</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn2"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content-wrapper fade-in">
+            <div class="page-header mb-4">
+                <h2><i class="fas fa-chart-line me-2"></i>Tổng quan hệ thống</h2>
+                <p class="text-muted">Thống kê và báo cáo tổng quan</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-3">
+                    <div class="card stat-card primary">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">Trường học</div>
+                                    <div class="stat-value" id="totalSchools">0</div>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-school"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-3">
+                    <div class="card stat-card success">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">Học sinh</div>
+                                    <div class="stat-value" id="totalStudents">0</div>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-3">
+                    <div class="card stat-card warning">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">Xe buýt</div>
+                                    <div class="stat-value" id="totalBuses">0</div>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-bus"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-3">
+                    <div class="card stat-card danger">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">Tài xế</div>
+                                    <div class="stat-value" id="totalDrivers">0</div>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Stats -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-route fa-3x text-primary mb-3"></i>
+                            <h3 id="totalRoutes">0</h3>
+                            <p class="text-muted mb-0">Tuyến đường</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-map-marker-alt fa-3x text-success mb-3"></i>
+                            <h3 id="totalStops">0</h3>
+                            <p class="text-muted mb-0">Điểm đón/trả</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-calendar-check fa-3x text-warning mb-3"></i>
+                            <h3 id="totalTrips">0</h3>
+                            <p class="text-muted mb-0">Chuyến đi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-list me-2"></i>Danh sách trường học
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã</th>
+                                            <th>Tên trường</th>
+                                            <th>Địa chỉ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="schoolsList"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-calendar-day me-2"></i>Chuyến đi hôm nay
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã chuyến</th>
+                                            <th>Tuyến</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="todayTripsList"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="../../js/api-service.js"></script>
+    <script src="../../js/admin-layout.js"></script>
+    <script src="../../js/modules/dashboard.js"></script>
+</body>
+</html>

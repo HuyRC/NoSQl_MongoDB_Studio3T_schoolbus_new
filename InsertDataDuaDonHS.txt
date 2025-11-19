@@ -1,0 +1,171 @@
+use schoolbus;
+db.dropDatabase();
+
+/* ===================================================
+   1. SCHOOLS (Nhà trường)
+=================================================== */
+db.schools.createIndex({ code: 1 }, { unique: true });
+db.schools.createIndex({ location: "2dsphere" });
+
+db.schools.insertMany([
+  { code: "GD", name: "THPT Gia Định", address: "Quận Bình Thạnh, TP.HCM" },
+  { code: "LQD", name: "THPT Lê Quý Đôn", address: "Quận 3, TP.HCM" }
+]);
+
+/* ===================================================
+   2. STUDENTS (Học sinh)
+=================================================== */
+db.students.createIndex({ mahs: 1 }, { unique: true });
+db.students.createIndex({ schoolCode: 1 });
+
+db.students.insertMany([
+  // THPT Gia Định
+  { mahs: "GD0001", hoten: "Nguyễn Minh Khang", lop: "10A1", ngaysinh: ISODate("2009-03-12"), phai: "Nam", diachi: "Phan Đăng Lưu, Bình Thạnh, TP.HCM", schoolCode: "GD", schoolId: db.schools.findOne({ code: "GD" })._id },
+  { mahs: "GD0002", hoten: "Trần Gia Hân",     lop: "10A2", ngaysinh: ISODate("2009-11-05"), phai: "Nữ",  diachi: "Bạch Đằng, Bình Thạnh, TP.HCM", schoolCode: "GD", schoolId: db.schools.findOne({ code: "GD" })._id },
+  { mahs: "GD0003", hoten: "Phạm Anh Khoa",    lop: "11A1", ngaysinh: ISODate("2008-07-21"), phai: "Nam", diachi: "Điện Biên Phủ, Bình Thạnh, TP.HCM", schoolCode: "GD", schoolId: db.schools.findOne({ code: "GD" })._id },
+  { mahs: "GD0004", hoten: "Lê Ngọc Mai",      lop: "11A2", ngaysinh: ISODate("2008-01-30"), phai: "Nữ",  diachi: "Xô Viết Nghệ Tĩnh, Bình Thạnh, TP.HCM", schoolCode: "GD", schoolId: db.schools.findOne({ code: "GD" })._id },
+  { mahs: "GD0005", hoten: "Đỗ Hoàng Long",    lop: "12A1", ngaysinh: ISODate("2007-05-18"), phai: "Nam", diachi: "Ung Văn Khiêm, Bình Thạnh, TP.HCM", schoolCode: "GD", schoolId: db.schools.findOne({ code: "GD" })._id },
+
+  // THPT Lê Quý Đôn
+  { mahs: "LQD0001", hoten: "Võ Thảo Nhi",     lop: "10A1", ngaysinh: ISODate("2009-09-09"), phai: "Nữ",  diachi: "Lê Quý Đôn, Quận 3, TP.HCM", schoolCode: "LQD", schoolId: db.schools.findOne({ code: "LQD" })._id },
+  { mahs: "LQD0002", hoten: "Huỳnh Quốc Bảo",  lop: "10A3", ngaysinh: ISODate("2009-02-14"), phai: "Nam", diachi: "CMT8, Quận 3, TP.HCM", schoolCode: "LQD", schoolId: db.schools.findOne({ code: "LQD" })._id },
+  { mahs: "LQD0003", hoten: "Bùi Khánh Linh",  lop: "11A1", ngaysinh: ISODate("2008-06-27"), phai: "Nữ",  diachi: "Nguyễn Thông, Quận 3, TP.HCM", schoolCode: "LQD", schoolId: db.schools.findOne({ code: "LQD" })._id },
+  { mahs: "LQD0004", hoten: "Lâm Nhật Huy",    lop: "11A2", ngaysinh: ISODate("2008-12-03"), phai: "Nam", diachi: "Võ Văn Tần, Quận 3, TP.HCM", schoolCode: "LQD", schoolId: db.schools.findOne({ code: "LQD" })._id },
+  { mahs: "LQD0005", hoten: "Trương Mỹ Duyên", lop: "12A1", ngaysinh: ISODate("2007-08-15"), phai: "Nữ",  diachi: "Nguyễn Đình Chiểu, Quận 3, TP.HCM", schoolCode: "LQD", schoolId: db.schools.findOne({ code: "LQD" })._id }
+]);
+
+/* ===================================================
+   3. STOPS (Điểm đón/trả)
+=================================================== */
+db.stops.createIndex({ code: 1 }, { unique: true });
+db.stops.createIndex({ location: "2dsphere" });
+
+db.stops.insertMany([
+  { code: "STOP_BT01", name: "Phan Đăng Lưu - BT", location: { type: "Point", coordinates: [106.6867, 10.8024] }, note: null, schoolCode: "GD" },
+  { code: "STOP_BT02", name: "Bạch Đằng - BT", location: { type: "Point", coordinates: [106.6916, 10.8039] }, note: null, schoolCode: "GD" },
+  { code: "STOP_BT03", name: "Ung Văn Khiêm - BT", location: { type: "Point", coordinates: [106.7140, 10.8015] }, note: null, schoolCode: "GD" },
+
+  { code: "STOP_Q3_01", name: "Lê Quý Đôn - Q3", location: { type: "Point", coordinates: [106.6869, 10.7788] }, note: "Gần cổng trường", schoolCode: "LQD" },
+  { code: "STOP_Q3_02", name: "Võ Văn Tần - Q3", location: { type: "Point", coordinates: [106.6855, 10.7769] }, note: null, schoolCode: "LQD" },
+  { code: "STOP_Q3_03", name: "Nguyễn Đình Chiểu - Q3", location: { type: "Point", coordinates: [106.6883, 10.7780] }, note: null, schoolCode: "LQD" }
+]);
+
+/* ===================================================
+   4. ROUTES (Tuyến)
+=================================================== */
+db.routes.createIndex({ code: 1 }, { unique: true });
+db.routes.createIndex({ schoolCode: 1 });
+
+db.routes.insertMany([
+  {
+    code: "R-GD-AM",
+    name: "BT -> THPT Gia Định (Sáng)",
+    direction: "morning",
+    schoolCode: "GD",
+    schoolId: db.schools.findOne({ code: "GD" })._id,
+    isActive: true,
+    stopOrder: [
+      { seq: 1, stopCode: "STOP_BT01", stopId: db.stops.findOne({ code: "STOP_BT01" })._id, plannedTime: "06:25" },
+      { seq: 2, stopCode: "STOP_BT02", stopId: db.stops.findOne({ code: "STOP_BT02" })._id, plannedTime: "06:35" },
+      { seq: 3, stopCode: "STOP_BT03", stopId: db.stops.findOne({ code: "STOP_BT03" })._id, plannedTime: "06:45" }
+    ]
+  },
+  {
+    code: "R-LQD-AM",
+    name: "Q3 -> THPT Lê Quý Đôn (Sáng)",
+    direction: "morning",
+    schoolCode: "LQD",
+    schoolId: db.schools.findOne({ code: "LQD" })._id,
+    isActive: true,
+    stopOrder: [
+      { seq: 1, stopCode: "STOP_Q3_02", stopId: db.stops.findOne({ code: "STOP_Q3_02" })._id, plannedTime: "06:30" },
+      { seq: 2, stopCode: "STOP_Q3_03", stopId: db.stops.findOne({ code: "STOP_Q3_03" })._id, plannedTime: "06:40" },
+      { seq: 3, stopCode: "STOP_Q3_01", stopId: db.stops.findOne({ code: "STOP_Q3_01" })._id, plannedTime: "06:50" }
+    ]
+  }
+]);
+
+/* ===================================================
+   5. DRIVERS (Tài xế) & BUSES (Xe)
+=================================================== */
+db.drivers.createIndex({ phone: 1 }, { unique: true });
+db.drivers.createIndex({ code: 1 }, { unique: true });
+
+db.drivers.insertMany([
+  { code: "DRV001", fullName: "Trần Văn Tài", phone: "0905000001", licenseNo: "B2-123456", active: true },
+  { code: "DRV002", fullName: "Ngô Minh Hiếu", phone: "0905000002", licenseNo: "B2-654321", active: true }
+]);
+
+db.buses.createIndex({ plate: 1 }, { unique: true });
+db.buses.createIndex({ code: 1 }, { unique: true });
+
+db.buses.insertMany([
+  { code: "BUS001", plate: "51B-123.45", capacity: 30, brand: "Ford Transit", year: 2022 },
+  { code: "BUS002", plate: "51G-678.90", capacity: 28, brand: "Hyundai Solati", year: 2021 }
+]);
+
+/* ===================================================
+   6. TRIPS (Chuyến)
+=================================================== */
+db.trips.createIndex({ routeCode: 1, date: 1 });
+db.trips.createIndex({ driverCode: 1, date: 1 });
+
+db.trips.insertMany([
+  {
+    tripCode: "TRIP-GD-AM-20251024",
+    routeCode: "R-GD-AM",
+    routeId: db.routes.findOne({ code: "R-GD-AM" })._id,
+    date: new Date("2025-10-24"),
+    busCode: "BUS001",
+    busId: db.buses.findOne({ code: "BUS001" })._id,
+    driverCode: "DRV001",
+    driverId: db.drivers.findOne({ code: "DRV001" })._id,
+    status: "planned"
+  },
+  {
+    tripCode: "TRIP-LQD-AM-20251024",
+    routeCode: "R-LQD-AM",
+    routeId: db.routes.findOne({ code: "R-LQD-AM" })._id,
+    date: new Date("2025-10-24"),
+    busCode: "BUS002",
+    busId: db.buses.findOne({ code: "BUS002" })._id,
+    driverCode: "DRV002",
+    driverId: db.drivers.findOne({ code: "DRV002" })._id,
+    status: "planned"
+  }
+]);
+
+/* ===================================================
+   7. ASSIGNMENTS (Gán học sinh)
+=================================================== */
+db.assignments.createIndex({ routeCode: 1, active: 1 });
+db.assignments.createIndex({ studentCode: 1, active: 1 });
+
+function assign(studentCode, routeCode, pickCode, dropCode) {
+  db.assignments.insertOne({
+    studentCode,
+    studentId: db.students.findOne({ mahs: studentCode })._id,
+    routeCode,
+    routeId: db.routes.findOne({ code: routeCode })._id,
+    pickStopCode: pickCode,
+    pickStopId: db.stops.findOne({ code: pickCode })._id,
+    dropStopCode: dropCode,
+    dropStopId: db.stops.findOne({ code: dropCode })._id,
+    days: ["Mon","Tue","Wed","Thu","Fri"],
+    active: true
+  });
+}
+
+// Gia Định
+assign("GD0001", "R-GD-AM", "STOP_BT01", "STOP_BT03");
+assign("GD0002", "R-GD-AM", "STOP_BT02", "STOP_BT02");
+assign("GD0003", "R-GD-AM", "STOP_BT03", "STOP_BT03");
+assign("GD0004", "R-GD-AM", "STOP_BT02", "STOP_BT02");
+assign("GD0005", "R-GD-AM", "STOP_BT03", "STOP_BT03");
+
+// Lê Quý Đôn
+assign("LQD0001", "R-LQD-AM", "STOP_Q3_01", "STOP_Q3_01");
+assign("LQD0002", "R-LQD-AM", "STOP_Q3_02", "STOP_Q3_02");
+assign("LQD0003", "R-LQD-AM", "STOP_Q3_03", "STOP_Q3_03");
+assign("LQD0004", "R-LQD-AM", "STOP_Q3_02", "STOP_Q3_02");
+assign("LQD0005", "R-LQD-AM", "STOP_Q3_03", "STOP_Q3_03");
