@@ -174,3 +174,25 @@ public class Assignment
     public List<string> days { get; set; } = new();
     public bool active { get; set; } = true;
 }
+
+// ========== 9. ATTENDANCE (Điểm danh) ==========
+public class Attendance
+{
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
+
+    public string tripCode { get; set; } = ""; // Mã chuyến đi (VD: TRIP-GD-AM-20251024)
+    
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string tripId { get; set; }
+
+    public string studentCode { get; set; } = "";
+    
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string studentId { get; set; }
+
+    public string status { get; set; } = "present"; // present | absent | excused
+    public DateTime checkInTime { get; set; } = DateTime.Now;
+    public string? note { get; set; }
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Điểm danh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <style>
+        /* Đảm bảo nội dung chính nằm bên phải menu */
+        .main-content {
+            margin-left: 250px; /* Phải bằng width của sidebar */
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        /* Khi menu đóng lại trên mobile (nếu có tính năng này) */
+        .toggled .main-content {
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 px-4 mb-4">
+            <div class="container-fluid p-0">
+                <button class="btn btn-light d-md-none me-2" id="sidebarToggleMobile">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <h4 class="m-0 fw-bold text-primary">Quản lý Điểm danh</h4>
+                
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle text-decoration-none text-dark" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5 me-1"></i>
+                            <span>Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn2">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid px-4">
+            
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-body p-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold text-secondary">Chọn Chuyến xe (Trip)</label>
+                            <select id="tripSelect" class="form-select form-select-lg">
+                                <option value="">-- Đang tải dữ liệu... --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button id="btnLoadManifest" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-search me-2"></i>Lấy danh sách HS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 fw-bold text-primary"><i class="bi bi-list-task me-2"></i>Danh sách Học sinh</h5>
+                    <span id="tripInfoBadge" class="badge bg-light text-dark border px-3 py-2 rounded-pill d-none">
+                        <i class="bi bi-bus-front me-1"></i> <span id="tripInfoText">...</span>
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-secondary">
+                                <tr>
+                                    <th class="text-center py-3" width="5%">STT</th>
+                                    <th class="py-3" width="15%">Mã HS</th>
+                                    <th class="py-3" width="25%">Họ Tên</th>
+                                    <th class="py-3" width="10%">Lớp</th>
+                                    <th class="py-3" width="20%">Điểm đón</th>
+                                    <th class="text-center py-3" width="25%">Điểm danh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center py-5 text-muted">
+                                        <i class="bi bi-arrow-up-circle fs-1 d-block mb-2"></i>
+                                        Vui lòng chọn chuyến xe để bắt đầu điểm danh
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/admin-layout.js"></script> 
+    <script src="../../js/modules/attendance.js"></script>
+</body>
+</html>

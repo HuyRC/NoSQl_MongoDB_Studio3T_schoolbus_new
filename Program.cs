@@ -320,6 +320,38 @@ app.MapDelete("/api/assignments/{id}", async (string id) =>
     return r.DeletedCount == 0 ? Results.NotFound() : Results.NoContent();
 });
 
+// ======================================================
+// =============== ATTENDANCE CRUD ======================
+// ======================================================
+
+// 1. Lấy danh sách điểm danh của một chuyến cụ thể
+app.MapGet("/api/attendances/trip/{tripCode}", async (string tripCode) =>
+{
+    var list = await ctx.Attendances.Find(a => a.tripCode == tripCode).ToListAsync();
+    return Results.Ok(list);
+});
+
+// 2. Điểm danh (Check-in/Check-out) - Dùng Upsert (Nếu có rồi thì cập nhật, chưa có thì thêm mới)
+app.MapPost("/api/attendances", async (Attendance a) =>
+{
+    // Tìm xem học sinh này đã được điểm danh trong chuyến này chưa
+    var filter = Builders<Attendance>.Filter.And(
+        Builders<Attendance>.Filter.Eq(x => x.tripCode, a.tripCode),
+        Builders<Attendance>.Filter.Eq(x => x.studentCode, a.studentCode)
+    );
+
+    var update = Builders<Attendance>.Update
+        .Set(x => x.tripId, a.tripId)
+        .Set(x => x.studentId, a.studentId)
+        .Set(x => x.status, a.status)
+        .Set(x => x.checkInTime, DateTime.Now)
+        .Set(x => x.note, a.note);
+
+    // Thực hiện Upsert
+    await ctx.Attendances.UpdateOneAsync(filter, update, new UpdateOptions { IsUpsert = true });
+    
+    return Results.Ok(new { message = "Điểm danh thành công" });
+});
 
 Console.WriteLine("✅ Server is running at http://localhost:5100");
 Console.WriteLine("📊 Swagger UI: http://localhost:5100/swagger");
