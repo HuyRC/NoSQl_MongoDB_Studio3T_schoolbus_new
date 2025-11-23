@@ -27,4 +27,5 @@ public class MongoContext
     public IMongoCollection<Trip> Trips => Db.GetCollection<Trip>(nameof(Trip).ToLower() + "s");
     public IMongoCollection<Bus> Buses => Db.GetCollection<Bus>(nameof(Bus).ToLower() + "es"); // “Buses” đặc biệt
     public IMongoCollection<Driver> Drivers => Db.GetCollection<Driver>(nameof(Driver).ToLower() + "s");
+    public IMongoCollection<Attendance> Attendances => Db.GetCollection<Attendance>(nameof(Attendance).ToLower() + "s");
 }

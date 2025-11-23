@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Điểm danh</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    
+    <style>
+        /* Tinh chỉnh giao diện giống ảnh mẫu School Management */
+        body {
+            background-color: #f3f4f6; /* Nền xám nhạt hiện đại */
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px 30px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        .card-custom {
+            background: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .page-header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        /* Style bảng dữ liệu */
+        .table thead th {
+            background-color: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 16px;
+        }
+        .table tbody td {
+            padding: 12px 16px;
+            vertical-align: middle;
+            color: #1f2937;
+            border-bottom: 1px solid #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm rounded-3 mb-4 px-3">
+            <div class="container-fluid">
+                <button class="btn btn-light d-md-none me-2" id="sidebarToggleMobile">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <span class="navbar-brand fw-bold text-primary mb-0 h1">
+                    <i class="fas fa-clipboard-check me-2"></i>Điểm danh
+                </span>
+                
+                <div class="ms-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-link text-decoration-none text-dark dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle fa-lg me-1"></i> Admin
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn2">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="page-header-title mb-1">Quản lý Điểm danh</h2>
+                <p class="text-muted mb-0">Ghi nhận trạng thái chuyên cần của học sinh theo từng chuyến xe</p>
+            </div>
+        </div>
+
+        <div class="card card-custom p-4">
+            
+            <div class="row g-3 mb-4 align-items-end">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-secondary small">CHỌN CHUYẾN XE (TRIP)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-primary"><i class="fas fa-bus"></i></span>
+                        <select id="tripSelect" class="form-select">
+                            <option value="">-- Đang tải danh sách chuyến... --</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 d-flex gap-2">
+                    <button id="btnLoadManifest" class="btn btn-primary flex-grow-1 shadow-sm">
+                        <i class="fas fa-search me-2"></i>Lấy DS
+                    </button>
+                    <button id="btnExportExcel" class="btn btn-success shadow-sm" onclick="exportToExcel()">
+                        <i class="fas fa-file-excel me-2"></i>Xuất Excel
+                    </button>
+                </div>
+
+                <div class="col-md-3 text-end">
+                    <span id="tripInfoBadge" class="badge bg-light text-dark border px-3 py-2 d-none">
+                        <i class="fas fa-clock me-1"></i> <span id="tripInfoText">--:--</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="mainTable" class="table table-hover mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th class="text-center" width="5%">STT</th>
+                            <th width="15%">MÃ HỌC SINH</th>
+                            <th width="25%">HỌ VÀ TÊN</th>
+                            <th width="10%">LỚP</th>
+                            <th width="20%">ĐIỂM ĐÓN</th>
+                            <th class="text-center" width="25%">TRẠNG THÁI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fas fa-list-alt fa-3x mb-3 opacity-25"></i>
+                                <p class="mb-0">Vui lòng chọn chuyến xe để hiển thị danh sách học sinh.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <span class="text-muted small" id="rowCounter">Đang hiển thị 0 học sinh</span>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#">Sau</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <script src="../../js/admin-layout.js"></script> 
+    <script src="../../js/modules/attendance.js"></script>
+
+</body>
+</html>
