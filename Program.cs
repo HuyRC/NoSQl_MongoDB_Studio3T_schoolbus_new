@@ -353,6 +353,13 @@ app.MapPost("/api/attendances", async (Attendance a) =>
     return Results.Ok(new { message = "Điểm danh thành công" });
 });
 
+// 3. Hủy điểm danh (Xóa bản ghi)
+app.MapDelete("/api/attendances/{tripCode}/{studentCode}", async (string tripCode, string studentCode) =>
+{
+    var res = await ctx.Attendances.DeleteOneAsync(x => x.tripCode == tripCode && x.studentCode == studentCode);
+    return res.DeletedCount > 0 ? Results.Ok(new { message = "Đã hủy điểm danh" }) : Results.NotFound();
+});
+
 Console.WriteLine("✅ Server is running at http://localhost:5100");
 Console.WriteLine("📊 Swagger UI: http://localhost:5100/swagger");
 Console.WriteLine("🏠 Dashboard: http://localhost:5100/pages/admin/dashboard.html");
